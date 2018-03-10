@@ -1,0 +1,35 @@
+#!/bin/sh
+
+start() {
+    echo "Starting ckb"
+    /usr/bin/ckb-daemon&
+    touch /var/lock/ckb-daemon
+    echo
+}
+
+stop() {
+    echo "Stopping ckb"
+    killall ckb-daemon
+    rm -rf /var/lock/ckb-daemon
+    echo
+}
+
+# Logic.
+case "$1" in
+    start)
+	start
+	;;
+    stop)
+	stop
+	;;
+    status)
+	status ckb-daemon
+	;;
+    restart|reload|condrestart)
+	stop
+	start
+	;;
+    *)
+	echo "Usage: $0 {start|stop|restart|reload|status}"
+	exit 1
+esac
